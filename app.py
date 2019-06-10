@@ -137,7 +137,7 @@ def main():
                        CommandHandler('start',
                                       start),
                        
-                       RegexHandler('12|13|14|15|16|17|18|19|20',
+                       RegexHandler('12|13|14|20|12|15|16|17|18|19|20',
                                       received_nomre,
                                       pass_user_data=True),
                        
