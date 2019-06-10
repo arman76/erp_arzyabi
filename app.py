@@ -50,7 +50,7 @@ def user_pass(bot, update, user_data):
 
 
 def received_userpass(bot, update, user_data):
-    user_data['nomre'] = 0
+    user_data['nomre'] = -1
     with open('n.txt', 'r') as f:
         NUM = int(f.read())
     print(NUM)
