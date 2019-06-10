@@ -128,16 +128,20 @@ def main():
             CHOOSING: [RegexHandler('^.*\(username\, password\)$',
                                     user_pass,
                                     pass_user_data=True),
+                       
                        RegexHandler('^شروع$',
                                     start_scrp,
                                     pass_user_data=True),
+                       
                        CommandHandler('start',
                                       start),
-                       MessageHandler(Filters.all,
-                                      unknown),
-                       MessageHandler(Filters.text,
+                       
+                       RegexHandler('12|13|14|15|16|17|18|19|20',
                                       received_nomre,
                                       pass_user_data=True),
+                       
+                       MessageHandler(Filters.all,
+                                      unknown),
                        ],
             USERPASS: [MessageHandler(Filters.text,
                                       received_userpass,
