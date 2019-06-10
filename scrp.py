@@ -85,7 +85,14 @@ def main(user_data, bot, update):
                 nomre = user_data['nomre']
                 print(nomre)
                 els = wait.until(ec.presence_of_all_elements_located((By.TAG_NAME, 'input')))
+                avali = 1
                 for el in els:
+                    if avali == 1:
+                        if nomre == 8:
+                            nomre -= 1
+                        else:
+                            nomre += 1
+                        avali = 0
                     if el.get_attribute('id')[:3] == 'rb' + str(nomre):
                         el.click()
                 elem = wait.until(ec.presence_of_element_located((By.ID, 'btnContinue')))
