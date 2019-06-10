@@ -67,7 +67,7 @@ def main(user_data, bot, update):
                 print('tt')
                 while t <= 20:
                     print('t1')
-                    if user_data['nomre'] == 0:
+                    if user_data['nomre'] == -1:
                         if t == 20:
                             reply_keyboard2 = [['فرستادن نام کاربری و کلمه عبور (username, password)'],
                                                ['شروع']]
@@ -100,7 +100,7 @@ def main(user_data, bot, update):
                 sleep(2)
                 driver.close()
                 driver.switch_to.window(tabs[0])
-                user_data['nomre'] = 0
+                user_data['nomre'] = -1
                 if len(elems) == 1:
                     break
                 elems = wait.until(ec.presence_of_all_elements_located((By.CSS_SELECTOR, 'input[type="button"]')))
