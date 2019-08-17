@@ -116,7 +116,7 @@ def unknown(bot, update):
 
 
 def main():
-    updater = Updater('590619031:AAFVHZjrOKusFYtBiaDzTAN9fG7mVlA4vaI')
+    updater = Updater('')
 
     dp = updater.dispatcher
     restart_command_handler = CommandHandler('stop', restart, pass_user_data=True)
