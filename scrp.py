@@ -26,8 +26,8 @@ def main(user_data, bot, update):
         f.write('1')
     driver = webdriver.PhantomJS()
     try:
-        driver.get("http://erp.guilan.ac.ir/Dashboard.aspx")
-        if 'erp.guilan.ac.ir/GoToDashboard.aspx' in driver.current_url:
+        driver.get("http://sada.guilan.ac.ir/Dashboard.aspx")
+        if 'sada.guilan.ac.ir/GoToDashboard.aspx' in driver.current_url:
             driver.find_element_by_class_name('refreshDash').click()
 
         wait = WebDriverWait(driver, 10)
