@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from telegram import ReplyKeyboardMarkup
-from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
+from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler)
 import scrp
 import _thread
@@ -34,7 +34,7 @@ reply_keyboard = [['فرستادن نام کاربری و کلمه عبور (use
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
 
-def start(bot, update):
+def start(update, context):
     update.message.reply_text(
         'سلام! کار من اینه که با استفاده از یوزرنیم و پسورد erp وارد سامانه بشم'
         ' و فرم ارزشیابی و انجام بدم! *فقط یه نکته مهم واسه هر دفعه که باید نمره بدی ۲۰ ثانیه وقت داری*',
@@ -43,13 +43,16 @@ def start(bot, update):
     return CHOOSING
 
 
-def user_pass(bot, update, user_data):
+def user_pass(update, context):
+    user_data = context.user_data
     user_data['choice'] = 'username'
     update.message.reply_text('خب {} خودتو بده:'.format('نام کاربری'))
     return USERPASS
 
 
-def received_userpass(bot, update, user_data):
+def received_userpass(update, context):
+    user_data = context.user_data
+    bot = context.bot
     user_data['nomre'] = -1
     with open('n.txt', 'r') as f:
         NUM = int(f.read())
@@ -77,7 +80,9 @@ def received_userpass(bot, update, user_data):
     return CHOOSING
 
 
-def start_scrp(bot, update, user_data):
+def start_scrp(update, context):
+    user_data = context.user_data
+    bot = context.bot
     if 'username' not in user_data:
 
         update.message.reply_text('اول باید نام کاربری و کلمه عبور رو بفرستی!')
@@ -97,7 +102,8 @@ def start_scrp(bot, update, user_data):
     return CHOOSING
 
 
-def received_nomre(bot, update, user_data):
+def received_nomre(update, context):
+    user_data = context.user_data
     nomre = update.message.text
     nomre = 20 - int(nomre)
     user_data['nomre'] = nomre
@@ -105,18 +111,19 @@ def received_nomre(bot, update, user_data):
     return CHOOSING
 
 
-def restart(bot, update, user_data):
+def restart(update, context):
+    user_data = context.user_data
     user_data.clear()
     update.message.reply_text('اطلاعاتت پاک شد.', reply_markup=markup)
 
 
-def unknown(bot, update):
+def unknown(update, context):
     update.message.reply_text('ورودی یا دستور نامعتبر!', reply_markup=markup)
     return CHOOSING
 
 
 def main():
-    updater = Updater('590619031:AAFVHZjrOKusFYtBiaDzTAN9fG7mVlA4vaI')
+    updater = Updater('590619031:AAFVHZjrOKusFYtBiaDzTAN9fG7mVlA4vaI', use_context=True)
 
     dp = updater.dispatcher
     restart_command_handler = CommandHandler('stop', restart, pass_user_data=True)
@@ -125,28 +132,24 @@ def main():
         entry_points=[CommandHandler('start', start), MessageHandler(Filters.text, start)],
 
         states={
-            CHOOSING: [RegexHandler('^.*\(username\, password\)$',
-                                    user_pass,
-                                    pass_user_data=True),
+            CHOOSING: [MessageHandler(Filters.regex('^.*\(username\, password\)$'),
+                                    user_pass),
                        
-                       
-                       RegexHandler('^شروع$',
-                                    start_scrp,
-                                    pass_user_data=True),
+                       MessageHandler(Filters.regex('^شروع$'),
+                                    start_scrp),
                        
                        CommandHandler('start',
                                       start),
                        
-                       RegexHandler('12|13|14|20|12|15|16|17|18|19|20',
-                                      received_nomre,
-                                      pass_user_data=True),
+                       MessageHandler(Filters.regex('12|13|14|20|12|15|16|17|18|19|20'),
+                                      received_nomre),
                        
                        MessageHandler(Filters.all,
                                       unknown),
                        ],
             USERPASS: [MessageHandler(Filters.text,
                                       received_userpass,
-                                      pass_user_data=True)],
+                                      )],
 
         },
 
